@@ -1,0 +1,2 @@
+number,value,datetime_start,datetime_complete,duration,params_batch_size,params_dense_units,params_dropout_rate,params_lr,params_model_type,params_optimizer,params_use_pretrained,state
+0,0.9787499904632568,2025-06-01 13:01:11.634577,2025-06-01 19:01:19.015170,0 days 06:00:07.380593,32,128,0.40473832427075473,0.0005200321792708175,DenseNet121,adam,True,COMPLETE
