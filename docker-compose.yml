@@ -1,0 +1,32 @@
+# data/ and outputs/ are mounted from the host so the 1.6 GB dataset is downloaded once
+# and results are visible outside the container.
+x-app: &app
+  build: .
+  image: drinking-waste-classification
+  volumes:
+    - ./data:/app/data
+    - ./outputs:/app/outputs
+
+services:
+  # docker compose run --rm download
+  download:
+    <<: *app
+    command: python scripts/download_data.py
+
+  # docker compose run --rm explain [--n-samples 8 ...]
+  explain:
+    <<: *app
+    entrypoint: ["sh", "-c", "python scripts/download_data.py && python explain.py \"$$@\"", "--"]
+    command: []
+
+  # docker compose up jupyter  ->  http://localhost:8888
+  jupyter:
+    <<: *app
+    ports:
+      - "127.0.0.1:8888:8888"   # no token, so only reachable from this machine
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "python scripts/download_data.py &&
+             jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+             --ServerApp.token='' --ServerApp.password=''"
